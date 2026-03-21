@@ -43,7 +43,7 @@ typecheck:
 clean:
 	@echo "🧹 Cleaning build files..."
 	npm run clean
-	rm -rf dist node_modules/ .vite
+	rm -rf dist .vite
 
 # Publish to npm
 publish: clean build
