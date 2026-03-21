@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton, IconButtonProps, Tooltip } from '@mui/material'
-import { Brightness4, Brightness7 } from '@mui/icons-material'
+import { DarkMode, LightMode } from '@mui/icons-material'
 import { useTheme } from './useTheme'
 
 export interface ThemeToggleProps extends Omit<IconButtonProps, 'onClick'> {
@@ -9,13 +9,13 @@ export interface ThemeToggleProps extends Omit<IconButtonProps, 'onClick'> {
    * @default "Switch to dark mode"
    */
   lightModeTooltip?: string
-  
+
   /**
    * Tooltip text for dark mode
    * @default "Switch to light mode"
    */
   darkModeTooltip?: string
-  
+
   /**
    * Whether to show tooltip
    * @default true
@@ -46,7 +46,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       }}
       {...props}
     >
-      {resolvedThemeMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+      {resolvedThemeMode === 'light' ? <LightMode /> : <DarkMode />}
     </IconButton>
   )
 
@@ -55,7 +55,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   }
 
   return (
-    <Tooltip 
+    <Tooltip
       title={resolvedThemeMode === 'light' ? lightModeTooltip : darkModeTooltip}
       arrow
     >
