@@ -2,7 +2,7 @@ import { ThemeProvider, SidebarLayout } from '@gofreego/tsutils'
 import {
   Home,
   Palette,
-  Menu as MenuIcon
+  Menu as MenuIcon,
 } from '@mui/icons-material'
 
 // Import component demo pages
@@ -39,6 +39,7 @@ function App() {
                 id: 'submenu',
                 label: 'Submenu',
                 path: '/sidebar',
+                icon: <MenuIcon />,
                 component: <SidebarDemo />
               }
             ]
