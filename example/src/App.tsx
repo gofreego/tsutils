@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider, SidebarLayout } from '@gofreego/tsutils'
 import {
   Home,
@@ -14,41 +13,40 @@ import SidebarDemo from './pages/SidebarDemo'
 function App() {
   return (
     <ThemeProvider initialMode="system" enableCssVariables={true}>
-      <BrowserRouter>
-        <SidebarLayout
-          menuItems={[
-            {
-              id: 'home',
-              label: 'Home',
-              path: '/',
-              icon: <Home />,
-              component: <HomePage />,
-            },
-            {
-              id: 'theme',
-              label: 'Theme System',
-              path: '/theme',
-              icon: <Palette />,
-              component: <ThemeDemo />
-            },
-            {
-              id: 'sidebar',
-              label: 'Sidebar Layout',
-              icon: <MenuIcon />,
-              children: [
-                {
-                  id: 'submenu',
-                  label: 'Submenu',
-                  path: '/sidebar',
-                  component: <SidebarDemo />
-                }
-              ]
-            },
-          ]}
-          sidebarWidth={260}
-        />
-      </BrowserRouter>
-    </ThemeProvider>
+      <SidebarLayout
+        isRouter={true}
+        menuItems={[
+          {
+            id: 'home',
+            label: 'Home',
+            path: '/',
+            icon: <Home />,
+            component: <HomePage />,
+          },
+          {
+            id: 'theme',
+            label: 'Theme System',
+            path: '/theme',
+            icon: <Palette />,
+            component: <ThemeDemo />
+          },
+          {
+            id: 'sidebar',
+            label: 'Sidebar Layout',
+            icon: <MenuIcon />,
+            children: [
+              {
+                id: 'submenu',
+                label: 'Submenu',
+                path: '/sidebar',
+                component: <SidebarDemo />
+              }
+            ]
+          },
+        ]}
+        sidebarWidth={260}
+      />
+    </ThemeProvider >
   )
 }
 

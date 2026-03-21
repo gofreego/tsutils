@@ -1,17 +1,18 @@
 import React, { useState, useEffect, ReactNode, CSSProperties } from 'react'
-import { 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemButton, 
-  ListItemIcon, 
-  ListItemText, 
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Box,
   Typography,
   Collapse,
   IconButton
 } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import { BrowserRouter, NavLink, Outlet, useLocation, Routes, Route } from 'react-router-dom'
 
 /**
  * Menu item configuration
@@ -50,39 +51,21 @@ export interface SidebarLayoutProps {
   bodyStyle?: CSSProperties
   /** Default expanded submenu IDs */
   defaultExpanded?: string[]
+  /** If true, wraps SidebarLayout in BrowserRouter and enables router-based navigation */
+  isRouter?: boolean
 }
 
-/**
- * Detect if react-router-dom is available
- */
-const detectRouter = () => {
-  try {
-    // Try to require react-router-dom
-    const router = require('react-router-dom')
-    return {
-      available: true,
-      NavLink: router.NavLink,
-      Outlet: router.Outlet,
-      useLocation: router.useLocation,
-      Routes: router.Routes,
-      Route: router.Route,
-    }
-  } catch {
-    return { available: false }
-  }
-}
+
 
 /**
  * Recursive menu item renderer for router mode
  */
 const RouterMenuItem: React.FC<{
   item: MenuItem
-  router: any
   depth?: number
   expanded: Set<string>
   onToggle: (id: string) => void
-}> = ({ item, router, depth = 0, expanded, onToggle }) => {
-  const { NavLink } = router
+}> = ({ item, depth = 0, expanded, onToggle }) => {
   const hasChildren = item.children && item.children.length > 0
   const isExpanded = expanded.has(item.id)
 
@@ -116,7 +99,7 @@ const RouterMenuItem: React.FC<{
               {item.icon}
             </ListItemIcon>
           )}
-          <ListItemText 
+          <ListItemText
             primary={item.label}
             primaryTypographyProps={{
               fontSize: '0.875rem',
@@ -136,7 +119,6 @@ const RouterMenuItem: React.FC<{
               <RouterMenuItem
                 key={child.id}
                 item={child}
-                router={router}
                 depth={depth + 1}
                 expanded={expanded}
                 onToggle={onToggle}
@@ -154,7 +136,7 @@ const RouterMenuItem: React.FC<{
  */
 const flattenMenuRoutes = (items: MenuItem[]): Array<{ path: string; component: ReactNode }> => {
   const routes: Array<{ path: string; component: ReactNode }> = []
-  
+
   const flatten = (menuItems: MenuItem[]) => {
     for (const item of menuItems) {
       if (item.path && item.component) {
@@ -165,15 +147,16 @@ const flattenMenuRoutes = (items: MenuItem[]): Array<{ path: string; component: 
       }
     }
   }
-  
+
   flatten(items)
   return routes
 }
 
 /**
- * Router-based Sidebar Layout Component
+ * Inner component for Router-based Sidebar Layout
+ * (Must be rendered inside a Router context to use useLocation)
  */
-const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = ({
+const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
   menuItems,
   sidebarWidth = 250,
   className = '',
@@ -182,9 +165,7 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
   sidebarStyle,
   bodyStyle,
   defaultExpanded = [],
-  router,
 }) => {
-  const { Outlet, useLocation, Routes, Route } = router
   const location = useLocation()
   const [expanded, setExpanded] = useState<Set<string>>(new Set(defaultExpanded))
 
@@ -214,7 +195,7 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
         }
         return undefined
       }
-      
+
       const activeItem = findActiveItem(menuItems)
       if (activeItem) {
         onMenuChange(activeItem.id)
@@ -223,14 +204,14 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
   }, [location.pathname, menuItems, onMenuChange])
 
   // Check if menu items have components - if so, render routes internally
-  const hasComponents = menuItems.some(item => 
+  const hasComponents = menuItems.some(item =>
     item.component || (item.children?.some(child => child.component))
   )
 
   const routes = hasComponents ? flattenMenuRoutes(menuItems) : []
 
   return (
-    <Box 
+    <Box
       className={className}
       sx={{
         display: 'flex',
@@ -259,7 +240,6 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
             <RouterMenuItem
               key={item.id}
               item={item}
-              router={router}
               expanded={expanded}
               onToggle={handleToggle}
             />
@@ -278,10 +258,10 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
         {hasComponents ? (
           <Routes>
             {routes.map(({ path, component }) => (
-              <Route 
-                key={path} 
-                path={path} 
-                element={component} 
+              <Route
+                key={path}
+                path={path}
+                element={component}
               />
             ))}
           </Routes>
@@ -290,6 +270,17 @@ const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps & { router: any }> = 
         )}
       </Box>
     </Box>
+  )
+}
+
+/**
+ * Wrapper for Router-based Sidebar Layout
+ */
+const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps> = (props) => {
+  return (
+    <BrowserRouter>
+      <SidebarLayoutRouterInner {...props} />
+    </BrowserRouter>
   )
 }
 
@@ -348,7 +339,7 @@ const StateMenuItem: React.FC<{
               {item.icon}
             </ListItemIcon>
           )}
-          <ListItemText 
+          <ListItemText
             primary={item.label}
             primaryTypographyProps={{
               fontSize: '0.875rem',
@@ -434,7 +425,7 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
   const activeItem = findActiveItem(menuItems, selectedId)
 
   return (
-    <Box 
+    <Box
       className={className}
       sx={{
         display: 'flex',
@@ -482,8 +473,8 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
         }}
       >
         {activeItem?.component || (
-          <Typography 
-            variant="body2" 
+          <Typography
+            variant="body2"
             color="text.secondary"
             sx={{ textAlign: 'center', mt: 4 }}
           >
@@ -568,13 +559,10 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
  * />
  */
 export const SidebarLayout: React.FC<SidebarLayoutProps> = (props) => {
-  const router = detectRouter()
-
-  // Use router mode if available and menuItems have paths
-  const useRouterMode = router.available && props.menuItems.some(item => item.path)
-
-  if (useRouterMode) {
-    return <SidebarLayoutWithRouter {...props} router={router} />
+  // If explicitly requested to be a router, or implicitly requested because items have paths
+  // AND NOT explicitly disabling the router.
+  if (props.isRouter) {
+    return <SidebarLayoutWithRouter {...props} />
   }
 
   return <SidebarLayoutWithState {...props} />
