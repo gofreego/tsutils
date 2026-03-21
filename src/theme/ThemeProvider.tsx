@@ -3,6 +3,7 @@ import { Theme, ThemeContextValue, ThemeMode, ResolvedThemeMode } from './types'
 import { lightTheme } from './light'
 import { darkTheme } from './dark'
 import { LocalStorage } from '../utils/localStorage'
+import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from '@mui/material'
 
 export const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
@@ -33,55 +34,55 @@ const getSystemTheme = (): ResolvedThemeMode => {
  */
 const applyCssVariables = (theme: Theme, resolvedMode: ResolvedThemeMode): void => {
   if (typeof document === 'undefined') return
-  
+
   const root = document.documentElement
-  
+
   // Set data attribute for theme mode
   root.setAttribute('data-theme', resolvedMode)
-  
+
   // Apply color variables
   Object.entries(theme.colors).forEach(([key, value]) => {
     root.style.setProperty(`--color-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`, value)
   })
-  
+
   // Apply spacing variables
   Object.entries(theme.spacing).forEach(([key, value]) => {
     root.style.setProperty(`--spacing-${key}`, value)
   })
-  
+
   // Apply border radius variables
   Object.entries(theme.borderRadius).forEach(([key, value]) => {
     root.style.setProperty(`--radius-${key}`, value)
   })
-  
+
   // Apply font size variables
   Object.entries(theme.fontSize).forEach(([key, value]) => {
     root.style.setProperty(`--text-${key}`, value)
   })
-  
+
   // Apply font weight variables
   Object.entries(theme.fontWeight).forEach(([key, value]) => {
     root.style.setProperty(`--font-${key}`, value)
   })
-  
+
   // Apply line height variables
   Object.entries(theme.lineHeight).forEach(([key, value]) => {
     root.style.setProperty(`--leading-${key}`, value)
   })
-  
+
   // Apply elevation variables
   Object.entries(theme.elevation).forEach(([key, value]) => {
     root.style.setProperty(`--shadow-${key}`, value)
   })
-  
+
   // Apply transition variables
   Object.entries(theme.transition).forEach(([key, value]) => {
     root.style.setProperty(`--transition-${key}`, value)
   })
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 
-  children, 
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+  children,
   initialTheme,
   initialMode = 'system',
   storageKey = THEME_STORAGE_KEY,
@@ -114,7 +115,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     if (typeof window === 'undefined') return
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       setSystemTheme(e.matches ? 'dark' : 'light')
     }
@@ -166,9 +167,38 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     toggleTheme,
   }), [theme, themeMode, resolvedThemeMode, setTheme, setThemeMode, toggleTheme])
 
+  const muiTheme = useMemo(() => createTheme({
+    palette: {
+      mode: resolvedThemeMode,
+      primary: {
+        main: theme.colors.primary,
+      },
+      secondary: {
+        main: theme.colors.secondary,
+      },
+      error: {
+        main: theme.colors.error,
+      },
+      success: {
+        main: theme.colors.success,
+      },
+      background: {
+        default: theme.colors.background,
+        paper: theme.colors.backgroundSecondary,
+      },
+      text: {
+        primary: theme.colors.text,
+        secondary: theme.colors.textSecondary,
+      }
+    },
+  }), [resolvedThemeMode, theme])
+
   return (
     <ThemeContext.Provider value={contextValue}>
-      {children}
+      <MuiThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        {children}
+      </MuiThemeProvider>
     </ThemeContext.Provider>
   )
 }
