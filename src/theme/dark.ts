@@ -8,60 +8,60 @@ import { Theme } from './types'
  */
 export const darkTheme: Theme = {
   colors: {
-    // Primary - Material Blue 400 (WCAG AA compliant on dark background)
-    primary: '#60a5fa',
-    primaryHover: '#93c5fd',
-    primaryActive: '#3b82f6',
-    
-    // Secondary - Gray 400 (WCAG AA compliant on dark background)
-    secondary: '#9ca3af',
-    secondaryHover: '#d1d5db',
-    secondaryActive: '#e5e7eb',
-    
+    // Primary - Vibrant Indigo (Striking on VSCode Black)
+    primary: '#818cf8',        // Indigo 400
+    primaryHover: '#6366f1',   // Indigo 500
+    primaryActive: '#4f46e5',  // Indigo 600
+
+    // Secondary - VSCode Gray
+    secondary: '#858585',
+    secondaryHover: '#a6a6a6',
+    secondaryActive: '#cccccc',
+
     // Background colors
-    background: '#0f172a',      // Slate 900
-    backgroundSecondary: '#1e293b', // Slate 800
-    backgroundTertiary: '#334155',  // Slate 700
-    
+    background: '#1e1e1e',      // Main editor/workspace background
+    backgroundSecondary: '#252526', // Sidebar, panels
+    backgroundTertiary: '#2d2d2d',  // Highlights, smaller surfaces
+
     // Surface colors (for cards, modals, etc.)
-    surface: '#1e293b',
-    surfaceHover: '#334155',
-    
-    // Text colors (WCAG AAA compliant on dark backgrounds)
-    text: '#f1f5f9',           // Slate 100 (14.57:1 on slate-900)
-    textSecondary: '#cbd5e1',  // Slate 300 (9.99:1 on slate-900)
-    textTertiary: '#94a3b8',   // Slate 400 (5.68:1 on slate-900 - AAA compliant)
-    textDisabled: '#64748b',   // Slate 500
-    
+    surface: '#252526',
+    surfaceHover: '#2a2d2e',
+
+    // Text colors
+    text: '#cccccc',           // Primary text
+    textSecondary: '#999999',  // Secondary text, comments
+    textTertiary: '#6b6b6b',   // Disabled/tertiary
+    textDisabled: '#4d4d4d',   // Disabled
+
     // Semantic colors
-    error: '#f87171',          // Red 400 (WCAG AA compliant)
+    error: '#f48771',
     errorHover: '#fca5a5',
-    errorBackground: '#450a0a',
-    
-    success: '#4ade80',        // Green 400 (WCAG AA compliant)
+    errorBackground: '#5a1d1d',
+
+    success: '#89d185',
     successHover: '#86efac',
-    successBackground: '#052e16',
-    
-    warning: '#fbbf24',        // Amber 400 (WCAG AA compliant)
-    warningHover: '#fcd34d',
-    warningBackground: '#451a03',
-    
-    info: '#60a5fa',           // Blue 400 (WCAG AA compliant)
-    infoHover: '#93c5fd',
-    infoBackground: '#172554',
-    
+    successBackground: '#1e401e',
+
+    warning: '#cca700',
+    warningHover: '#d7ba7d',
+    warningBackground: '#5c4d00',
+
+    info: '#75beff',
+    infoHover: '#9cdcfe',
+    infoBackground: '#0a3254',
+
     // Border colors
-    border: '#334155',         // Slate 700
-    borderHover: '#475569',    // Slate 600
-    borderFocus: '#60a5fa',    // Primary
-    
+    border: '#3c3c3c',         // VSCode borders
+    borderHover: '#444444',
+    borderFocus: '#818cf8',    // Focus border
+
     // Divider
-    divider: '#334155',
-    
+    divider: '#333333',
+
     // Overlay (for modals, dropdowns)
-    overlay: 'rgba(0, 0, 0, 0.7)',
+    overlay: 'rgba(0, 0, 0, 0.4)',
   },
-  
+
   spacing,
   borderRadius,
   fontSize,
