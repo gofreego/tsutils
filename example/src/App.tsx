@@ -34,9 +34,15 @@ function App() {
             {
               id: 'sidebar',
               label: 'Sidebar Layout',
-              path: '/sidebar',
               icon: <MenuIcon />,
-              component: <SidebarDemo />
+              children: [
+                {
+                  id: 'submenu',
+                  label: 'Submenu',
+                  path: '/sidebar',
+                  component: <SidebarDemo />
+                }
+              ]
             },
           ]}
           sidebarWidth={260}
