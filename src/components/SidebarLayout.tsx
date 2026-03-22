@@ -278,7 +278,8 @@ const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
  */
 const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps> = (props) => {
   return (
-    <BrowserRouter>
+    // @ts-expect-error - future prop exists in v6 for v7 migration, but is removed from v7 types
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SidebarLayoutRouterInner {...props} />
     </BrowserRouter>
   )
