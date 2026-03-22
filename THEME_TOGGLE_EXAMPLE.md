@@ -28,11 +28,12 @@ function App() {
    - Automatically loads theme preference from localStorage on mount
    - Persists theme changes to localStorage key: `'app-theme-mode'`
 
-2. **ThemeToggle** - Round button that switches between light/dark themes
-   - Shows moon icon (🌙) in light mode
-   - Shows sun icon (☀️) in dark mode
-   - Includes tooltip explaining the action
-   - Automatically saves to localStorage when clicked
+2. **ThemeToggle** - Round button that cycles between light, dark, and system themes
+   - Shows sun icon (☀️) in light mode
+   - Shows moon icon (🌙) in dark mode
+   - Shows auto icon (🅰️) in system mode
+   - Includes tooltip explaining the toggle action
+   - Automatically saves preference to localStorage
 
 3. **Cross-Project Sync** - Theme syncs across apps on the same domain
    - `admin.zshala.com/usermanagement` sets theme to dark

@@ -1,6 +1,6 @@
 import { Box, Typography, Paper, Button, Stack, Card, CardContent } from '@mui/material'
 import { useTheme, ThemeToggle } from '@gofreego/tsutils'
-import { Brightness4, Brightness7, SettingsBrightness } from '@mui/icons-material'
+import { Brightness4, Brightness7, BrightnessAuto } from '@mui/icons-material'
 
 export default function ThemeDemo() {
   const { theme, themeMode, resolvedThemeMode, setThemeMode } = useTheme()
@@ -65,7 +65,7 @@ export default function ThemeDemo() {
           </Button>
           <Button
             variant={themeMode === 'system' ? 'contained' : 'outlined'}
-            startIcon={<SettingsBrightness />}
+            startIcon={<BrightnessAuto />}
             onClick={() => setThemeMode('system')}
           >
             System

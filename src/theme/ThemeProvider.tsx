@@ -153,10 +153,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   }, [])
 
   const toggleTheme = useCallback(() => {
-    // Toggle between light and dark, ignore system
-    const newMode: ThemeMode = resolvedThemeMode === 'light' ? 'dark' : 'light'
-    setThemeModeState(newMode)
-  }, [resolvedThemeMode])
+    setThemeModeState((prevMode) => {
+      if (prevMode === 'light') return 'dark'
+      if (prevMode === 'dark') return 'system'
+      return 'light'
+    })
+  }, [])
 
   const contextValue: ThemeContextValue = useMemo(() => ({
     theme,

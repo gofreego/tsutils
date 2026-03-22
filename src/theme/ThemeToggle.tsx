@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton, IconButtonProps, Tooltip } from '@mui/material'
-import { DarkMode, LightMode } from '@mui/icons-material'
+import { DarkMode, LightMode, BrightnessAuto } from '@mui/icons-material'
 import { useTheme } from './useTheme'
 
 export interface ThemeToggleProps extends Omit<IconButtonProps, 'onClick'> {
@@ -12,9 +12,15 @@ export interface ThemeToggleProps extends Omit<IconButtonProps, 'onClick'> {
 
   /**
    * Tooltip text for dark mode
-   * @default "Switch to light mode"
+   * @default "Switch to system mode"
    */
   darkModeTooltip?: string
+
+  /**
+   * Tooltip text for system mode
+   * @default "Switch to light mode"
+   */
+  systemModeTooltip?: string
 
   /**
    * Whether to show tooltip
@@ -24,17 +30,43 @@ export interface ThemeToggleProps extends Omit<IconButtonProps, 'onClick'> {
 }
 
 /**
- * A round button component for toggling between light and dark themes
- * Note: Toggling skips 'system' mode and switches directly between light and dark
+ * A round button component for toggling between light, dark, and system themes
  */
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   lightModeTooltip = 'Switch to dark mode',
-  darkModeTooltip = 'Switch to light mode',
+  darkModeTooltip = 'Switch to system theme',
+  systemModeTooltip = 'Switch to light theme',
   showTooltip = true,
   sx,
   ...props
 }) => {
-  const { resolvedThemeMode, toggleTheme } = useTheme()
+  const { themeMode, toggleTheme } = useTheme()
+
+  const getIcon = () => {
+    switch (themeMode) {
+      case 'light':
+        return <LightMode />
+      case 'dark':
+        return <DarkMode />
+      case 'system':
+        return <BrightnessAuto />
+      default:
+        return <BrightnessAuto />
+    }
+  }
+
+  const getTooltip = () => {
+    switch (themeMode) {
+      case 'light':
+        return lightModeTooltip
+      case 'dark':
+        return darkModeTooltip
+      case 'system':
+        return systemModeTooltip
+      default:
+        return lightModeTooltip
+    }
+  }
 
   const button = (
     <IconButton
@@ -46,7 +78,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       }}
       {...props}
     >
-      {resolvedThemeMode === 'light' ? <LightMode /> : <DarkMode />}
+      {getIcon()}
     </IconButton>
   )
 
@@ -55,10 +87,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   }
 
   return (
-    <Tooltip
-      title={resolvedThemeMode === 'light' ? lightModeTooltip : darkModeTooltip}
-      arrow
-    >
+    <Tooltip title={getTooltip()} arrow>
       {button}
     </Tooltip>
   )
