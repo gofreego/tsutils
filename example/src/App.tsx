@@ -9,6 +9,7 @@ import {
 import HomePage from './pages/HomePage'
 import ThemeDemo from './pages/ThemeDemo'
 import SidebarDemo from './pages/SidebarDemo'
+import ReadmeViewerDemo from './pages/ReadmeViewerDemo'
 
 function App() {
   return (
@@ -29,6 +30,13 @@ function App() {
             path: '/theme',
             icon: <Palette />,
             component: <ThemeDemo />
+          },
+          {
+            id: 'readme-viewer',
+            label: 'Readme Viewer',
+            path: '/readme-viewer',
+            icon: <MenuIcon />,
+            component: <ReadmeViewerDemo />
           },
           {
             id: 'sidebar',

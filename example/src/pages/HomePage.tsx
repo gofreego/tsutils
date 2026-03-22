@@ -1,7 +1,7 @@
 import { Box, Typography, Grid, Card, CardContent, CardActionArea } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useTheme, ThemeToggle } from '@gofreego/tsutils'
-import { Palette, SmartButton, Menu as MenuIcon } from '@mui/icons-material'
+import { Palette, SmartButton, Menu as MenuIcon, Article as ArticleIcon } from '@mui/icons-material'
 
 export default function HomePage() {
   const navigate = useNavigate()
@@ -28,6 +28,13 @@ export default function HomePage() {
       icon: <SmartButton sx={{ fontSize: 48 }} />,
       path: '/button',
       color: '#10b981'
+    },
+    {
+      name: 'Readme Viewer',
+      description: 'Markdown viewer with GitHub-like syntax highlighting and features.',
+      icon: <ArticleIcon sx={{ fontSize: 48 }} />,
+      path: '/readme-viewer',
+      color: '#ef4444'
     }
   ]
 
@@ -117,7 +124,7 @@ export default function HomePage() {
           </li>
           <li>
             <Typography variant="body2" color="text.secondary">
-              <strong>Components:</strong> Reusable UI components built with Material UI
+              <strong>Components:</strong> Reusable UI components built with Material UI, expanding with capabilities like ReadmeViewer.
             </Typography>
           </li>
           <li>
