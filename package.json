@@ -1,6 +1,6 @@
 {
   "name": "@gofreego/tsutils",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A comprehensive React + TypeScript library with common utilities, components, theme system, and HTTP client",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -10,7 +10,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "files": [
     "dist"
