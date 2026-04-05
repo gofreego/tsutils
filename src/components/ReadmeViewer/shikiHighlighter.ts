@@ -14,7 +14,7 @@ export const getHighlighter = async (): Promise<Highlighter> => {
 
     highlighterPromise = createHighlighter({
         themes: ['github-light', 'github-dark'],
-        langs: ['js', 'ts', 'go', 'json', 'bash', 'yaml', 'md', 'python', 'java', 'cpp', 'c', 'html', 'css', 'sql'],
+        langs: ['js', 'ts', 'go', 'json', 'bash', 'yaml', 'md', 'python', 'java', 'cpp', 'c', 'html', 'css', 'sql', 'http', 'text'],
     }).then(highlighter => {
         highlighterInstance = highlighter;
         return highlighter;

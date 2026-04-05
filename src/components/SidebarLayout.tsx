@@ -75,6 +75,7 @@ const RouterMenuItem: React.FC<{
         <ListItemButton
           component={hasChildren ? 'div' : NavLink}
           to={!hasChildren ? (item.path || `/${item.id}`) : undefined}
+          end={false}
           onClick={hasChildren ? () => onToggle(item.id) : undefined}
           sx={{
             pl: 2 + depth * 2,
@@ -236,7 +237,7 @@ const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
         }}
       >
         <List sx={{ p: 0 }}>
-          {menuItems.map((item) => (
+          {menuItems.filter(item => item.label).map((item) => (
             <RouterMenuItem
               key={item.id}
               item={item}
@@ -451,7 +452,7 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
         }}
       >
         <List sx={{ p: 0 }}>
-          {menuItems.map((item) => (
+          {menuItems.filter(item => item.label).map((item) => (
             <StateMenuItem
               key={item.id}
               item={item}

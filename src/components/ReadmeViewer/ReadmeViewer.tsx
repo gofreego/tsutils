@@ -3,8 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { Highlighter } from 'shiki';
 import './github-markdown.css';
+import 'katex/dist/katex.min.css';
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
@@ -14,13 +17,16 @@ interface ReadmeViewerProps {
   content: string;
   className?: string;
   isDark?: boolean;
+  muiTheme?: any;
 }
 
 const ReadmeViewer: React.FC<ReadmeViewerProps> = ({
   content,
   className = '',
-  isDark = false,
+  isDark: propIsDark,
+  muiTheme,
 }) => {
+  const isDark = propIsDark !== undefined ? propIsDark : (muiTheme?.palette?.mode === 'dark');
   const [highlighter, setHighlighter] = useState<Highlighter | null>(null);
   const [copiedBlocks, setCopiedBlocks] = useState<Set<string>>(new Set());
 
@@ -47,8 +53,18 @@ const ReadmeViewer: React.FC<ReadmeViewerProps> = ({
 
   return (
     <div className={`readme-viewer markdown-body ${className}`}>
+      <style>{`
+        .shiki-wrapper pre.shiki {
+          padding: 16px !important;
+          border-radius: 8px !important;
+          overflow-x: auto;
+          margin-bottom: 16px;
+          border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+        }
+      `}</style>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
         components={{
           code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
@@ -57,19 +73,28 @@ const ReadmeViewer: React.FC<ReadmeViewerProps> = ({
               const codeText = String(children).replace(/\n$/, '');
               const blockId = `code-${Math.random().toString(36).substr(2, 9)}`;
 
+              let highlightedHtml = '';
+              try {
+                highlightedHtml = highlighter.codeToHtml(codeText, {
+                  lang: match[1],
+                  theme: isDark ? 'github-dark' : 'github-light',
+                });
+              } catch (e) {
+                // Graceful fallback if language is unsupported by shiki
+                try {
+                  highlightedHtml = highlighter.codeToHtml(codeText, {
+                    lang: 'text',
+                    theme: isDark ? 'github-dark' : 'github-light',
+                  });
+                } catch (fallbackError) {
+                  // Ultimate fallback to just safely escaping text
+                  highlightedHtml = `<pre><code>${codeText}</code></pre>`;
+                }
+              }
+
               return (
                 <div style={{ position: 'relative' }}>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: highlighter.codeToHtml(
-                        codeText,
-                        {
-                          lang: match[1],
-                          theme: isDark ? 'github-dark' : 'github-light',
-                        }
-                      ),
-                    }}
-                  />
+                  <div className="shiki-wrapper" dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
                   <button
                     onClick={() => copyToClipboard(codeText, blockId)}
                     style={{

@@ -1,6 +1,6 @@
 {
   "name": "@gofreego/tsutils",
-  "version": "0.1.6",
+  "version": "0.1.12",
   "description": "A comprehensive React + TypeScript library with common utilities, components, theme system, and HTTP client",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -89,8 +89,11 @@
     }
   },
   "dependencies": {
+    "katex": "^0.16.44",
     "react-markdown": "^10.1.0",
+    "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "shiki": "^3.23.0"
   }
 }

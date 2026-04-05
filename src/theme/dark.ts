@@ -9,9 +9,9 @@ import { Theme } from './types'
 export const darkTheme: Theme = {
   colors: {
     // Primary - Vibrant Indigo (Striking on VSCode Black)
-    primary: '#818cf8',        // Indigo 400
-    primaryHover: '#6366f1',   // Indigo 500
-    primaryActive: '#4f46e5',  // Indigo 600
+    primary: '#a5b4fc',        // Indigo 300 (lighter for better dark mode visibility)
+    primaryHover: '#818cf8',   // Indigo 400
+    primaryActive: '#6366f1',  // Indigo 500
 
     // Secondary - VSCode Gray
     secondary: '#858585',
@@ -53,7 +53,7 @@ export const darkTheme: Theme = {
     // Border colors
     border: '#3c3c3c',         // VSCode borders
     borderHover: '#444444',
-    borderFocus: '#818cf8',    // Focus border
+    borderFocus: '#a5b4fc',    // Focus border
 
     // Divider
     divider: '#333333',
