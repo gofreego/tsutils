@@ -17,8 +17,13 @@ export interface HttpResponse<T = any> {
   headers: Headers
 }
 
+export interface ErrorData {
+  code: number
+  message: string
+}
+
 export interface HttpError extends Error {
   status?: number
   statusText?: string
-  data?: any
+  data?: ErrorData
 }

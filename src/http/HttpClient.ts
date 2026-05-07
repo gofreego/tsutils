@@ -54,7 +54,7 @@ export class HttpClient {
         try {
           error.data = await response.json()
         } catch {
-          error.data = await response.text()
+          error.data = { code: response.status, message: await response.text() }
         }
         throw error
       }
@@ -62,7 +62,7 @@ export class HttpClient {
       const responseData = await response.json()
 
       return {
-        data: responseData,
+        data: responseData as T,
         status: response.status,
         statusText: response.statusText,
         headers: response.headers,
@@ -74,6 +74,18 @@ export class HttpClient {
       }
       throw error
     }
+  }
+
+  setDefaultHeader(key: string, value: string): void {
+    this.defaultHeaders[key] = value
+  }
+
+  removeDefaultHeader(key: string): void {
+    delete this.defaultHeaders[key]
+  }
+
+  getDefaultHeaders(): Record<string, string> {
+    return { ...this.defaultHeaders }
   }
 
   get<T = any>(url: string, config?: RequestConfig): Promise<HttpResponse<T>> {
@@ -95,4 +107,15 @@ export class HttpClient {
   delete<T = any>(url: string, config?: RequestConfig): Promise<HttpResponse<T>> {
     return this.request<T>(url, { ...config, method: 'DELETE' })
   }
+}
+
+export function extractErrorMessage(error: any): string {
+  if (error instanceof Error) {
+    const httpError = error as HttpError
+    if (httpError.data) {
+      return httpError.data.message
+    }
+    return error.message
+  }
+  return 'An unexpected error occurred'
 }

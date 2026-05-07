@@ -1,3 +1,3 @@
 // Export HTTP client utilities
-export { HttpClient } from './HttpClient'
-export type { HttpClientConfig, RequestConfig, HttpResponse } from './types'
+export { HttpClient, extractErrorMessage } from './HttpClient'
+export type { HttpClientConfig, RequestConfig, HttpResponse, HttpError, ErrorData } from './types'
