@@ -53,6 +53,8 @@ export interface SidebarLayoutProps {
   defaultExpanded?: string[]
   /** If true, wraps SidebarLayout in BrowserRouter and enables router-based navigation */
   isRouter?: boolean
+  /** If true (default), wraps the router layout in BrowserRouter. Set to false when a BrowserRouter already exists higher in the tree. */
+  isBrowserRouter?: boolean
 }
 
 
@@ -278,6 +280,9 @@ const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
  * Wrapper for Router-based Sidebar Layout
  */
 const SidebarLayoutWithRouter: React.FC<SidebarLayoutProps> = (props) => {
+  if (props.isBrowserRouter === false) {
+    return <SidebarLayoutRouterInner {...props} />
+  }
   return (
     // @ts-expect-error - future prop exists in v6 for v7 migration, but is removed from v7 types
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
