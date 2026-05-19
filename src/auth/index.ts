@@ -1,5 +1,5 @@
 export {SessionManager} from './sessionManager'
-export {AuthService} from './AuthService'
+export {AuthService} from './authService'
 export type {
   SignInRequest,
   SignInResponse,
@@ -13,5 +13,5 @@ export type {
   GenerateLoginTokenResponse,
   SignInWithLoginTokenRequest,
 } from './struct'
-export type { IAuthService } from './AuthService'
+export type { IAuthService } from './authService'
 export type { ISessionManager } from './sessionManager'
