@@ -2,6 +2,8 @@
 export { NotFoundPage } from './NotFoundPage'
 export { LoginCallbackPage } from './LoginCallbackPage'
 export type { LoginCallbackPageProps } from './LoginCallbackPage'
+export { ProtectedRoute } from './ProtectedRoute'
+export type { ProtectedRouteProps } from './ProtectedRoute'
 export { SidebarLayout } from './SidebarLayout'
 export type { MenuItem, SidebarLayoutProps } from './SidebarLayout'
 export { default as ReadmeViewer } from './ReadmeViewer/ReadmeViewer'
