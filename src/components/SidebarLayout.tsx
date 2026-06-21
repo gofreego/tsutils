@@ -37,6 +37,10 @@ export interface SidebarLayoutProps {
   menuItems: MenuItem[]
   /** Width of the sidebar */
   sidebarWidth?: string | number
+  /** Header component to display at the top of the sidebar */
+  header?: ReactNode
+  /** Footer component to display at the bottom of the sidebar */
+  footer?: ReactNode
   /** Additional CSS class for container */
   className?: string
   /** Default selected menu item ID (for non-router mode) */
@@ -162,6 +166,8 @@ const flattenMenuRoutes = (items: MenuItem[]): Array<{ path: string; component: 
 const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
   menuItems,
   sidebarWidth = 250,
+  header,
+  footer,
   className = '',
   onMenuChange,
   style,
@@ -234,11 +240,14 @@ const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
             position: 'relative',
             borderRight: '1px solid',
             borderColor: 'divider',
+            display: 'flex',
+            flexDirection: 'column',
             ...sidebarStyle,
           },
         }}
       >
-        <List sx={{ p: 0 }}>
+        {header && <Box className="sidebar-header">{header}</Box>}
+        <List sx={{ p: 0, flexGrow: 1, overflowY: 'auto' }}>
           {menuItems.filter(item => item.label).map((item) => (
             <RouterMenuItem
               key={item.id}
@@ -248,6 +257,7 @@ const SidebarLayoutRouterInner: React.FC<SidebarLayoutProps> = ({
             />
           ))}
         </List>
+        {footer && <Box className="sidebar-footer">{footer}</Box>}
       </Drawer>
 
       <Box
@@ -386,6 +396,8 @@ const StateMenuItem: React.FC<{
 const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
   menuItems,
   sidebarWidth = 250,
+  header,
+  footer,
   className = '',
   defaultSelected,
   onMenuChange,
@@ -452,11 +464,14 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
             position: 'relative',
             borderRight: '1px solid',
             borderColor: 'divider',
+            display: 'flex',
+            flexDirection: 'column',
             ...sidebarStyle,
           },
         }}
       >
-        <List sx={{ p: 0 }}>
+        {header && <Box className="sidebar-header">{header}</Box>}
+        <List sx={{ p: 0, flexGrow: 1, overflowY: 'auto' }}>
           {menuItems.filter(item => item.label).map((item) => (
             <StateMenuItem
               key={item.id}
@@ -468,6 +483,7 @@ const SidebarLayoutWithState: React.FC<SidebarLayoutProps> = ({
             />
           ))}
         </List>
+        {footer && <Box className="sidebar-footer">{footer}</Box>}
       </Drawer>
 
       <Box
