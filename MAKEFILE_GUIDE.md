@@ -34,6 +34,15 @@ make example-build    # Build example for production
 
 ### Publishing
 ```bash
+# patch: 0.1.19 → 0.1.20
+npm version patch
+
+# minor: 0.1.19 → 0.2.0
+npm version minor
+
+# major: 0.1.19 → 1.0.0
+npm version major
+
 make publish      # Clean + build + publish to npm
 ```
 
