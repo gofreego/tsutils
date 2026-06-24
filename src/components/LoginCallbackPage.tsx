@@ -25,7 +25,7 @@ export function LoginCallbackPage({ authService, navigateTo = '/', onLoginFailed
       return
     }
     authService
-      .signInWithLoginToken({ loginToken })
+      .signInWithLoginToken({ loginToken, includePermissions: true })
       .then(() => {
         navigate(navigateTo, { replace: true })
       })
