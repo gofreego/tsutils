@@ -81,6 +81,10 @@ export class HttpClient {
     }
   }
 
+  setOnUnauthorized(handler: (error: HttpError) => void): void {
+    this.onUnauthorized = handler
+  }
+
   setDefaultHeader(key: string, value: string): void {
     this.defaultHeaders[key] = value
   }
