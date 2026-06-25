@@ -51,6 +51,7 @@ export class AuthService implements IAuthService {
     )
     if (response.data.accessToken) {
       this.sessionManager.save(response.data)
+      this.client.setDefaultHeader('Authorization', `Bearer ${response.data.accessToken}`)
     }
     return response.data
   }
@@ -71,6 +72,7 @@ export class AuthService implements IAuthService {
         accessToken: response.data.accessToken,
         refreshToken: response.data.refreshToken,
       })
+      this.client.setDefaultHeader('Authorization', `Bearer ${response.data.accessToken}`)
     }
 
     return response.data
@@ -86,6 +88,7 @@ export class AuthService implements IAuthService {
       return response.data
     } finally {
       this.sessionManager.clear()
+      this.client.removeDefaultHeader('Authorization')
     }
   }
 
@@ -104,6 +107,7 @@ export class AuthService implements IAuthService {
     )
     if (response.data.accessToken) {
       this.sessionManager.save(response.data)
+      this.client.setDefaultHeader('Authorization', `Bearer ${response.data.accessToken}`)
     }
     return response.data
   }
@@ -125,6 +129,11 @@ export class AuthService implements IAuthService {
   }
 
   initializeAuth(): void {
-    this.sessionManager.initialize()
+    const session = this.sessionManager.get()
+    if (session?.accessToken && Number(session.expiresAt) > Date.now() / 1000) {
+      this.client.setDefaultHeader('Authorization', `Bearer ${session.accessToken}`)
+    } else {
+      this.client.removeDefaultHeader('Authorization')
+    }
   }
 }

@@ -21,18 +21,16 @@ export interface ISessionManager {
     getSessionId(): string | undefined
     /** True when a non-expired access token is stored. */
     isAuthenticated(): boolean
-    /** Called on app startup: restore the auth header or wipe an expired session. */
-    initialize(): void
 }
 
 export class SessionManager implements ISessionManager {
     private static instance: SessionManager
     private readonly key: string
-    private readonly client: HttpClient
+    // private readonly client: HttpClient
     private cache: SignInResponse | null = null
 
     private constructor(client: HttpClient, key = SESSION_KEY) {
-        this.client = client
+        // this.client = client
         this.key = key
     }
 
@@ -46,7 +44,6 @@ export class SessionManager implements ISessionManager {
     save(session: SignInResponse): void {
         this.cache = session
         LocalStorage.setItem(this.key, session)
-        this.setAuthToken(session.accessToken)
     }
 
     patch(updates: Partial<SignInResponse>): void {
@@ -55,15 +52,11 @@ export class SessionManager implements ISessionManager {
         const updated = { ...current, ...updates }
         this.cache = updated
         LocalStorage.setItem(this.key, updated)
-        if (updates.accessToken) {
-            this.setAuthToken(updates.accessToken)
-        }
     }
 
     clear(): void {
         this.cache = null
         LocalStorage.removeItem(this.key)
-        this.clearAuthToken()
     }
 
     get(): SignInResponse | null {
@@ -88,23 +81,6 @@ export class SessionManager implements ISessionManager {
         const session = this.get()
         if (!session?.accessToken) return false
         return Number(session.expiresAt) > Date.now() / 1000
-    }
-
-    initialize(): void {
-        const session = this.get()
-        if (session?.accessToken && Number(session.expiresAt) > Date.now() / 1000) {
-            this.setAuthToken(session.accessToken)
-        } else {
-            this.clear()
-        }
-    }
-
-    private setAuthToken(token: string): void {
-        this.client.setDefaultHeader('Authorization', `Bearer ${token}`)
-    }
-
-    private clearAuthToken(): void {
-        this.client.removeDefaultHeader('Authorization')
     }
 
 }
