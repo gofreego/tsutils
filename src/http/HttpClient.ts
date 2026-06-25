@@ -4,11 +4,13 @@ export class HttpClient {
   private baseURL: string
   private timeout: number
   private defaultHeaders: Record<string, string>
+  private onUnauthorized?: (error: HttpError) => void
 
   constructor(config: HttpClientConfig = {}) {
     this.baseURL = config.baseURL || ''
     this.timeout = config.timeout || 30000
     this.defaultHeaders = config.headers || {}
+    this.onUnauthorized = config.onUnauthorized
   }
 
   private buildURL(url: string, params?: Record<string, string | number | boolean>): string {
@@ -55,6 +57,9 @@ export class HttpClient {
           error.data = await response.json()
         } catch {
           error.data = { code: response.status, message: await response.text() }
+        }
+        if (response.status === 401 && this.onUnauthorized) {
+          this.onUnauthorized(error)
         }
         throw error
       }

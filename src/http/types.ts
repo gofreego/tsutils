@@ -2,6 +2,7 @@ export interface HttpClientConfig {
   baseURL?: string
   timeout?: number
   headers?: Record<string, string>
+  onUnauthorized?: (error: HttpError) => void
 }
 
 export interface RequestConfig extends Omit<RequestInit, 'body'> {
