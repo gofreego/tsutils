@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { extractErrorMessage } from '../http'
 import { useTheme } from '../theme'
@@ -8,20 +8,20 @@ import type { IAuthService } from '../auth'
 export interface LoginCallbackPageProps {
   authService: IAuthService
   navigateTo?: string
-  onLoginFailed?: () => void
 }
 
-export function LoginCallbackPage({ authService, navigateTo = '/', onLoginFailed }: LoginCallbackPageProps) {
+export function LoginCallbackPage({ authService, navigateTo = '/' }: LoginCallbackPageProps) {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { theme } = useTheme()
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const loginToken = searchParams.get('login_token')
 
     if (!loginToken) {
       console.error('Login callback failed: Missing login_token in query parameters')
-      onLoginFailed?.()
+      setError('Login failed: missing login token.')
       return
     }
     authService
@@ -30,8 +30,9 @@ export function LoginCallbackPage({ authService, navigateTo = '/', onLoginFailed
         navigate(navigateTo, { replace: true })
       })
       .catch((err: unknown) => {
-        console.error('Login callback failed:', extractErrorMessage(err))
-        onLoginFailed?.()
+        const message = extractErrorMessage(err)
+        console.error('Login callback failed:', message)
+        setError(message)
       })
   }, [])
 
@@ -47,10 +48,31 @@ export function LoginCallbackPage({ authService, navigateTo = '/', onLoginFailed
         gap: 2,
       }}
     >
-      <CircularProgress sx={{ color: theme.colors.surface }} />
-      <Typography variant="body2" sx={{ color: theme.colors.surface, opacity: 0.85 }}>
-        Signing you in…
-      </Typography>
+      {error ? (
+        <>
+          <Typography variant="body1" sx={{ color: theme.colors.surface, fontWeight: 500 }}>
+            {error}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate(navigateTo, { replace: true })}
+            sx={{
+              backgroundColor: theme.colors.surface,
+              color: theme.colors.primary,
+              '&:hover': { backgroundColor: theme.colors.surface, opacity: 0.9 },
+            }}
+          >
+            Retry
+          </Button>
+        </>
+      ) : (
+        <>
+          <CircularProgress sx={{ color: theme.colors.surface }} />
+          <Typography variant="body2" sx={{ color: theme.colors.surface, opacity: 0.85 }}>
+            Signing you in…
+          </Typography>
+        </>
+      )}
     </Box>
   )
 }
