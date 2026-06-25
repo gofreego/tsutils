@@ -29,14 +29,14 @@ export class SessionManager implements ISessionManager {
     // private readonly client: HttpClient
     private cache: SignInResponse | null = null
 
-    private constructor(client: HttpClient, key = SESSION_KEY) {
+    private constructor(key = SESSION_KEY) {
         // this.client = client
         this.key = key
     }
 
-    static getInstance(client: HttpClient): SessionManager {
+    static getInstance(): SessionManager {
         if (!SessionManager.instance) {
-            SessionManager.instance = new SessionManager(client)
+            SessionManager.instance = new SessionManager()
         }
         return SessionManager.instance
     }

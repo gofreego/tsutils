@@ -34,7 +34,7 @@ export class AuthService implements IAuthService {
 
   private constructor(client: HttpClient) {
     this.client = client
-    this.sessionManager = SessionManager.getInstance(client)
+    this.sessionManager = SessionManager.getInstance()
   }
 
   static getInstance(client: HttpClient): AuthService {
