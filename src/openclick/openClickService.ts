@@ -91,18 +91,11 @@ class OpenClickService {
             return;
         }
 
-        this.config = {
-            batchSize: 10,
-            flushIntervalMs: 3000,
-            capturePageviews: true,
-            respectDNT: true,
-            ...config,
-        };
+        this.config = this.withDefault(config);
 
         // Resolve distinct_id (anonymous until identify() is called)
         const { id, isNew } = this.getOrCreateAnonId();
         this.distinctId = id;
-        
         this.userId = this.getUserId();
         // Resolve session_id (per browser tab session)
         this.sessionId = this.getOrCreateSessionId();
@@ -128,6 +121,18 @@ class OpenClickService {
         if (isNew) {
             this.sendIdentify(this.distinctId);
         }
+    }
+
+
+    private withDefault(config: OpenClickConfig): OpenClickConfig {
+        return {
+            apiKey: config.apiKey,
+            httpClient: config.httpClient,
+            batchSize: config.batchSize || 10,
+            flushIntervalMs: config.flushIntervalMs || 3000,
+            capturePageviews: config.capturePageviews !== undefined ? config.capturePageviews : true,
+            respectDNT: config.respectDNT !== undefined ? config.respectDNT : true,
+        };
     }
 
     /**
@@ -226,7 +231,7 @@ class OpenClickService {
     private async sendBatch(events: EventPayload[]): Promise<void> {
         if (!this.config) return;
 
-        await this.config.httpClient.post('/api/v1/batch', {
+        await this.config.httpClient.post('/openclick/api/v1/batch', {
             api_key: this.config.apiKey,
             batch: events.map((e) => ({
                 event: e.event,
@@ -245,7 +250,7 @@ class OpenClickService {
         if (!this.config) return;
 
         try {
-            await this.config.httpClient.post('/api/v1/identify', {
+            await this.config.httpClient.post('/openclick/api/v1/identify', {
                 api_key: this.config.apiKey,
                 distinct_id: distinctId,
                 properties: {
@@ -278,7 +283,7 @@ class OpenClickService {
         const events = [...this.queue];
         this.queue = [];
 
-        this.config.httpClient.post('/api/v1/batch', {
+        this.config.httpClient.post('/openclick/api/v1/batch', {
             api_key: this.config.apiKey,
             batch: events.map((e) => ({
                 event: e.event,
