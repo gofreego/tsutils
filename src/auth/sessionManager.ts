@@ -83,4 +83,8 @@ export class SessionManager implements ISessionManager {
         return Number(session.expiresAt) > Date.now() / 1000
     }
 
+    getUserUUID(): string | undefined {
+        return this.get()?.user?.uuid || undefined
+    }
+
 }
